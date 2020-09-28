@@ -334,7 +334,7 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_live(self, name):
-        results = self.usher.live(name, headers=self.get_private_credential_headers())
+        results = self.usher.live(name, platform='ps4', headers=self.get_private_credential_headers())
         return self.error_check(results)
 
     @api_error_handler
