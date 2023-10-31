@@ -343,7 +343,7 @@ class Twitch:
     @api_error_handler
     @cache.cache_method(cache_limit=cache.limit)
     def get_live(self, name):
-        results = self.usher.live(name, headers=self.get_private_credential_headers())
+        results = self.usher.live(name, platform='ps4', headers=self.get_private_credential_headers())
         return self.error_check(results, private=True)
 
     @api_error_handler
@@ -352,7 +352,7 @@ class Twitch:
         if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
             results = self.usher.live_request(name, platform='ps4', headers=self.get_private_credential_headers())
         else:
-            results = self.usher.live_request(name, headers=self.get_private_credential_headers())
+            results = self.usher.live_request(name, platform='ps4', headers=self.get_private_credential_headers())
         return self.error_check(results, private=True)
 
     @api_error_handler
@@ -361,7 +361,7 @@ class Twitch:
         if not utils.inputstream_adpative_supports('EXT-X-DISCONTINUITY'):
             results = self.usher.video_request(video_id, platform='ps4', headers=self.get_private_credential_headers())
         else:
-            results = self.usher.video_request(video_id, headers=self.get_private_credential_headers())
+            results = self.usher.video_request(video_id, platform='ps4', headers=self.get_private_credential_headers())
         return self.error_check(results, private=True)
 
     @staticmethod
