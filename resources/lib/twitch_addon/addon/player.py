@@ -70,7 +70,7 @@ class TwitchPlayer(xbmc.Player):
             self.window.clearProperty(key=self.player_keys[k])
 
     def onPlayBackStarted(self):
-        twitch_host_matches = ['jtvnw.', 'ttvnw.', 'twitch.tv']
+        twitch_host_matches = ['jtvnw.', 'ttvnw.', 'twitch.tv', kodi.get_setting('stream_proxy')]
         is_playing = self.window.getProperty(key=self.player_keys['twitch_playing']) == 'True'
         seek_time = self.window.getProperty(key=self.seek_keys['seek_time'])
         if is_playing:

@@ -8,6 +8,8 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
+from urllib.parse import quote_plus
+
 from ..addon import utils
 from ..addon.common import kodi, log_utils
 from ..addon.constants import Keys, LINE_LENGTH
@@ -170,6 +172,18 @@ def route(api, seek_time=0, channel_id=None, video_id=None, slug=None, ask=False
 
                 if is_live:
                     _set_live(channel_id, name, channel_name, quality_label)
+                    stream_proxy = kodi.get_setting('stream_proxy')
+                    if stream_proxy != "none":
+                        proxy_it = kodi.get_setting('stream_proxy_everything') == 'true'
+                        if not proxy_it and api.access_token:
+                            try:
+                                proxy_it != api.check_subscribed(channel_id)
+                            except TwitchException:
+                                proxy_it = True
+                        if proxy_it:
+                            parameters = channel_name + ".m3u8?allow_source=true&allow_audio_only=true&fast_bread=true"
+                            play_url = "%s/playlist/%s" %(stream_proxy, quote_plus(parameters))
+
                 log_utils.log('Attempting playback using quality |%s| @ |%s|' % (quality_label, play_url), log_utils.LOGDEBUG)
                 item_dict['path'] = play_url
                 playback_item = kodi.create_item(item_dict, add=False)
