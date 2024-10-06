@@ -1000,3 +1000,11 @@ msgstr ""
 msgctxt "#30273"
 msgid "OAuth Token is expired or invalid"
 msgstr ""
+
+msgctxt "#42000"
+msgid "Stream Proxy"
+msgstr ""
+
+msgctxt "#42001"
+msgid "Proxy every stream"
+msgstr ""
