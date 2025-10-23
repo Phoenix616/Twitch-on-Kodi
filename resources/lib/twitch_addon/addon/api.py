@@ -59,7 +59,7 @@ class Twitch:
     def valid_token(self, client_id, token, scopes):  # client_id, token used for unique caching only
         token_check = self.root()
         while True:
-            if token_check.get('status') == 401:
+            if 'client_id' not in token_check:
                 kodi.notify(i18n('oauth_token'), i18n('invalid_expired_token'))
                 return False
             if token_check['client_id'] == self.client_id:
@@ -108,6 +108,10 @@ class Twitch:
     @cache.cache_method(cache_limit=1)
     def valid_private_token(self, client_id, token):  # client_id used for unique caching only
         token_check = self.validate(token)
+        if 'client_id' not in token_check:
+            log_utils.log(token_check, log_utils.LOGERROR)
+            kodi.notify(i18n('private_oauth_heading'), i18n('private_oauth_message'))
+            return False
         if token_check['client_id'] != self.private_client_id:
             matches_default = token_check['client_id'] == utils.get_client_id(default=True)
             log_utils.log('Error: Private OAuth Client-ID mismatch', log_utils.LOGERROR)
