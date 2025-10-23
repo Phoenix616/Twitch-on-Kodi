@@ -473,6 +473,15 @@ def remove_default_quality(content_type):
         storage.save(json_data)
         return result
 
+def compare_qualities(v1, v2):
+    if v1['name'] == 'Source':
+        return -1
+    elif v1['name'] == 'Audio Only':
+        return 1
+
+    q1_width = v1['name'].split('p')[0]
+    q2_width = v2['name'].split('p')[0]
+    return -1 if q1_width > q2_width else 1
 
 def clear_list(list_type, list_name):
     json_data = get_stored_json()

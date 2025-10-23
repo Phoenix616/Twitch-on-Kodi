@@ -8,13 +8,14 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
-
+from functools import cmp_to_key
 from urllib.parse import quote
 
 from . import menu_items
 from .common import kodi
 from .constants import Keys, Images, MODES, ADAPTIVE_SOURCE_TEMPLATE
-from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, get_thumbnail_size, get_refresh_stamp, to_string, get_private_oauth_token, convert_duration
+from .utils import the_art, TitleBuilder, i18n, get_oauth_token, get_vodcast_color, use_inputstream_adaptive, \
+    get_thumbnail_size, get_refresh_stamp, to_string, get_private_oauth_token, convert_duration, compare_qualities
 
 
 class PlaylistConverter(object):
@@ -525,6 +526,7 @@ class JsonListItemConverter(object):
         use_ia = use_inputstream_adaptive()
         if use_ia and not any(v['name'] == 'Adaptive' for v in videos) and not clip:
             videos.append(ADAPTIVE_SOURCE_TEMPLATE)
+        videos = sorted(videos, key=cmp_to_key(compare_qualities))
         if ask is True:
             return self.select_video_for_quality(videos)
         else:

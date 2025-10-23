@@ -8,12 +8,13 @@
     SPDX-License-Identifier: GPL-3.0-only
     See LICENSES/GPL-3.0-only for more information.
 """
+from functools import cmp_to_key
 
 from ..addon import utils
 from ..addon.common import kodi
 from ..addon.constants import ADAPTIVE_SOURCE_TEMPLATE, LINE_LENGTH
 from ..addon.converter import JsonListItemConverter
-from ..addon.utils import i18n
+from ..addon.utils import i18n, compare_qualities
 
 
 def route(api, content_type, target_id=None, name=None, video_id=None, remove=False, clip_id=None):
@@ -32,6 +33,7 @@ def route(api, content_type, target_id=None, name=None, video_id=None, remove=Fa
             use_ia = utils.use_inputstream_adaptive()
             if use_ia and not any(v['name'] == 'Adaptive' for v in videos) and (content_type != 'clip'):
                 videos.append(ADAPTIVE_SOURCE_TEMPLATE)
+            videos = sorted(videos, key=cmp_to_key(compare_qualities))
             result = converter.select_video_for_quality(videos)
             if result:
                 quality = result['name']
